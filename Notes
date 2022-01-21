@@ -1,0 +1,15 @@
+npm install -g purescript
+npm install -g spago
+
+spago init
+
+pure language = input -> output, and has no side effects
+strictly typed = compiler will check if types are the same when executing and give error (can't do 5 + "dog")
+               = also implicitly typed x = "dog"
+immutable data structures
+
+array can be randomly accessed, list need to be traversed
+array need to be re-writen when inserted, list only need to append for inserted
+
+
+
