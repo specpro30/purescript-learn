@@ -2,16 +2,11 @@ module Main where
 
 import Prelude
 
-import Data.List (List, filter, range)
+import Data.Foldable (sum)
+import Data.List (List, range, filter)
 import Effect (Effect)
 import Effect.Console (log)
 
-x :: List Int
-x = range 1 10
-
-result = filter (\e -> mod e 2 == 0) x
-
-evens = x
 
 main :: Effect Unit
 main = do
