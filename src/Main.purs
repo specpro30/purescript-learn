@@ -21,6 +21,14 @@ birthday :: Person -> Person
 birthday { name, age } = 
   { name: name, age: age + 1 } 
 
+-- | Better version of the "interfacy" type of example for birthday function
+-- | which doesn't care what kind of record gets passed, as long as it has an 
+-- | age field
+birthday' :: forall a. { age :: Int | a} -> { age :: Int | a}
+birthday' whatever =
+    whatever { age = whatever.age + 1}
+
+-- Some pattern matching
 f :: Int -> Int -> Int
 f 0 _ = -1 
 f _ y = 25 + y
