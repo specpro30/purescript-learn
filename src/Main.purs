@@ -34,6 +34,11 @@ f 0 _ = -1
 f _ y = 25 + y
 f 100 y = -50 + y
 f 0 50 = -500
+f x@5 y = x + y
+
+f x y | x > 5 = x + y
+
+-- catch all
 f x y = x + y
 
 main :: Effect Unit
