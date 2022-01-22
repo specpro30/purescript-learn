@@ -12,6 +12,7 @@ import Data.List (List(Nil), (:), range, filter)
 import Effect (Effect)
 import Effect.Console (log)
 
+-- AND types - Product type (age x name)
 type Person = 
   { name :: String
   , age :: Int
@@ -20,6 +21,36 @@ type Person =
 birthday :: Person -> Person
 birthday { name, age } = 
   { name: name, age: age + 1 } 
+
+-- ADT - Algebraic Data Types
+
+-- Product Type ADT
+type PersonDetails =
+    { age :: Int
+    , name :: String
+    }
+
+-- Sum Type ADT
+data Person'
+    = LocalPerson String Int
+    | ForeignPerson String Int Int
+
+newtype YearsOfResidence = ResidedInCountry Int
+
+data Person''
+    = LocalPerson'' PersonDetails
+    | ForeignPerson'' PersonDetails YearsOfResidence
+    | IllegalPerson PersonDetails
+
+s :: Person'
+s = LocalPerson "Joe" 39
+
+t :: Person'
+t = ForeignPerson "Sam" 40 10
+
+u :: Person''
+u = ForeignPerson'' { name: "Anny", age: 26 } (ResidedInCountry 10)
+
 
 -- | Better version of the "interfacy" type of example for birthday function
 -- | which doesn't care what kind of record gets passed, as long as it has an 
