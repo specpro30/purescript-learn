@@ -8,7 +8,7 @@ module Main
 import Prelude
 
 import Data.Foldable (sum)
-import Data.List (List, range, filter)
+import Data.List (List(Nil), (:), range, filter)
 import Effect (Effect)
 import Effect.Console (log)
 
@@ -29,14 +29,34 @@ birthday' whatever =
     whatever { age = whatever.age + 1}
 
 -- Some pattern matching
-f :: Int -> Int -> Int
+{- f :: Int -> Int -> Int
 f 0 _ = -1 
 f _ y = 25 + y
 f 100 y = -50 + y
 f 0 50 = -500
 f x@5 y = x + y
 
-f x y | x > 5 = x + y
+f x y | x > 5 = x + y -}
+
+-- Creating our own sum function
+
+sum' :: List Int -> Int 
+sum' l =
+    inner_sum' l 0
+    where
+        inner_sum' :: List Int -> Int -> Int
+        inner_sum' Nil accum = accum
+        inner_sum' (e : Nil) accum = e + accum
+        inner_sum' (e : es) accum = inner_sum' es (accum + e)
+
+--sum' (e : es) = e + sum' es
+
+--input = (1 : 2 : 3)
+
+-- This is head recursive as it starts at the top and find all the elements down the list, then from bottom back to top
+-- sum' (1 : 2 : 3) = 1 + sum' (2 : 3)
+-- sum' (2 : 3) = 2 + sum' (3)
+-- sum' (3) = 3
 
 -- catch all
 f x y = x + y
