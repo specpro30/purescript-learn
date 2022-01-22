@@ -22,7 +22,7 @@ birthday :: Person -> Person
 birthday { name, age } = 
   { name: name, age: age + 1 } 
 
--- ADT - Algebraic Data Types
+-- ADT - Algebraic Data Types (video 3)
 
 -- Product Type ADT
 type PersonDetails =
