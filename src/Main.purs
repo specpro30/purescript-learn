@@ -1,4 +1,9 @@
-module Main where
+module Main
+  ( Person
+  , birthday
+  , main
+  )
+  where
 
 import Prelude
 
@@ -7,7 +12,19 @@ import Data.List (List, range, filter)
 import Effect (Effect)
 import Effect.Console (log)
 
+type Person = 
+  { name :: String
+  , age :: Int
+  }
+
+birthday :: Person -> Person
+birthday person = 
+  person { age = person.age + 1 } 
 
 main :: Effect Unit
-main = do
-  log "Eat some 🍝 now!!!"
+main =
+    let 
+        joe = { name: "Joe", age: 39}
+        joes_birthday = birthday joe
+    in do
+    log "hello world" 
