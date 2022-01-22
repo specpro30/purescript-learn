@@ -27,4 +27,4 @@ main =
         joe = { name: "Joe", age: 39}
         joes_birthday = birthday joe
     in do
-    log "hello world" 
+    log "hello world 2" 
