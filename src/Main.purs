@@ -1,7 +1,5 @@
 module Main
-  ( Person
-  , birthday
-  , main
+  ( main
   )
   where
 
@@ -9,93 +7,85 @@ import Prelude
 
 import Data.Foldable (sum)
 import Data.List (List(Nil), (:), range, filter)
+import Data.Traversable (traverseDefault)
 import Effect (Effect)
 import Effect.Console (log)
+import Prim.RowList (Nil)
 
--- AND types - Product type (age x name)
-type Person = 
-  { name :: String
-  , age :: Int
-  }
+data Toppings
+    = Banana
+    | Salami
+    | Pineapple
+    | Pepperoni
 
-birthday :: Person -> Person
-birthday { name, age } = 
-  { name: name, age: age + 1 } 
+data Base
+    = Normal
+    | GlutenFree
 
--- ADT - Algebraic Data Types (video 3)
+data Sauce
+    = Tomato
+    | Creamy
 
--- Product Type ADT
-type PersonDetails =
-    { age :: Int
-    , name :: String
-    }
+data Pasta
+    = Penne
+    | Spaghetti
 
--- Sum Type ADT
-data Person'
-    = LocalPerson String Int
-    | ForeignPerson String Int Int
+data Seafood
+    = Salmon
+    | Tuna
+    | Abalone
+    | Uni
+    
 
-newtype YearsOfResidence = ResidedInCountry Int
+data Food
+    = Pizza Base (List Toppings)
+    | Pasta Sauce Pasta
+    | Seafood Seafood
 
-data Person''
-    = LocalPerson'' PersonDetails
-    | ForeignPerson'' PersonDetails YearsOfResidence
-    | IllegalPerson PersonDetails
+joes_order :: Food
+joes_order = Pizza Normal (Banana : Nil)
 
-s :: Person'
-s = LocalPerson "Joe" 39
+pauls_order :: Food
+pauls_order = Pasta Creamy Spaghetti
 
-t :: Person'
-t = ForeignPerson "Sam" 40 10
+rianas_order :: Food
+rianas_order = Pizza GlutenFree (Pepperoni : Nil) 
 
-u :: Person''
-u = ForeignPerson'' { name: "Anny", age: 26 } (ResidedInCountry 10)
+place_order :: Food -> String
+place_order food = 
+    case food of
+        Pizza base toppings -> "Pizza"
+        Pasta sauce pasta -> "Pasta"
+        Seafood fish -> "Fish"
+
+place_order' :: Food -> String
+place_order' (Pizza Normal toppings) = "Pizza - Normal"
+place_order' (Pizza GlutenFree toppings) = "Pizza - GlutenFree"
+place_order' (Pasta sauce pasta) = "Pasta"
+place_order' (Seafood seafood) = "Seafood"
 
 
--- | Better version of the "interfacy" type of example for birthday function
--- | which doesn't care what kind of record gets passed, as long as it has an 
--- | age field
-birthday' :: forall a. { age :: Int | a} -> { age :: Int | a}
-birthday' whatever =
-    whatever { age = whatever.age + 1}
+instance showFood :: Show Food where
+    show :: Food -> String
+    show (Pizza base toppings) = "Pizza - " <> show base
+    show (Pasta sauce pasta) = "Pasta"
+    show (Seafood seafood) = "Seafood"
 
--- Some pattern matching
-{- f :: Int -> Int -> Int
-f 0 _ = -1 
-f _ y = 25 + y
-f 100 y = -50 + y
-f 0 50 = -500
-f x@5 y = x + y
+instance showBase :: Show Base where
+    show :: Base -> String
+    show Normal = "normal"
+    show GlutenFree = "glutenfree"
 
-f x y | x > 5 = x + y -}
-
--- Creating our own sum function
-
-sum' :: List Int -> Int 
-sum' l =
-    inner_sum' l 0
-    where
-        inner_sum' :: List Int -> Int -> Int
-        inner_sum' Nil accum = accum
-        inner_sum' (e : Nil) accum = e + accum
-        inner_sum' (e : es) accum = inner_sum' es (accum + e)
-
---sum' (e : es) = e + sum' es
-
---input = (1 : 2 : 3)
-
--- This is head recursive as it starts at the top and find all the elements down the list, then from bottom back to top
--- sum' (1 : 2 : 3) = 1 + sum' (2 : 3)
--- sum' (2 : 3) = 2 + sum' (3)
--- sum' (3) = 3
-
--- catch all
-f x y = x + y
+instance eqFood :: Eq Food where
+    eq :: Food -> Food -> Boolean
+    eq (Pizza _ _) (Pizza _ _) = true
+    eq _ _ = false
 
 main :: Effect Unit
 main =
     let 
-        joe = { name: "Joe", age: 39}
-        joes_birthday = birthday joe
+        same_order = pauls_order == rianas_order
     in do
-    log "hello world 3.2" 
+    log $ show rianas_order
+    log $ show same_order
+    --log $ "Riana's order: " <> place_order' rianas_order 
